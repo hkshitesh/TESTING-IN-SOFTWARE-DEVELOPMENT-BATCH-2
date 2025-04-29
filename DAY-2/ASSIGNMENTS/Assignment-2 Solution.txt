@@ -1,0 +1,66 @@
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class LoanValidatorTest {
+
+    // Age Partition
+    @Test
+    public void testAgePartition() {
+        assertFalse(LoanValidator.isAgeValid(18));  // Invalid (too young)
+        assertTrue(LoanValidator.isAgeValid(30));   // Valid
+        assertFalse(LoanValidator.isAgeValid(65));  // Invalid (too old)
+    }
+
+    // Income Partition
+    @Test
+    public void testIncomePartition() {
+        assertFalse(LoanValidator.isIncomeValid(200000));   // Invalid
+        assertTrue(LoanValidator.isIncomeValid(300000));    // Valid
+    }
+
+    // Employment Type Partition
+    @Test
+    public void testEmploymentTypePartition() {
+        assertTrue(LoanValidator.isEmploymentTypeValid("Salaried"));       // Valid
+        assertTrue(LoanValidator.isEmploymentTypeValid("Self-Employed"));  // Valid
+        assertFalse(LoanValidator.isEmploymentTypeValid("Unemployed"));    // Invalid
+    }
+
+    // Credit Score Partition
+    @Test
+    public void testCreditScorePartition() {
+        assertFalse(LoanValidator.isCreditScoreValid(400));   // Invalid (too low)
+        assertTrue(LoanValidator.isCreditScoreValid(700));    // Valid
+        assertFalse(LoanValidator.isCreditScoreValid(900));   // Invalid (too high)
+    }
+
+    // Full Valid Application
+    @Test
+    public void testValidApplication() {
+        assertTrue(LoanValidator.isValidApplication(35, 500000, "Salaried", 750));
+    }
+
+    // Invalid Age
+    @Test
+    public void testInvalidAge() {
+        assertFalse(LoanValidator.isValidApplication(17, 600000, "Salaried", 700));
+    }
+
+    // Invalid Income
+    @Test
+    public void testInvalidIncome() {
+        assertFalse(LoanValidator.isValidApplication(30, 200000, "Salaried", 700));
+    }
+
+    // Invalid Employment Type
+    @Test
+    public void testInvalidEmploymentType() {
+        assertFalse(LoanValidator.isValidApplication(30, 500000, "Freelancer", 700));
+    }
+
+    // Invalid Credit Score
+    @Test
+    public void testInvalidCreditScore() {
+        assertFalse(LoanValidator.isValidApplication(30, 500000, "Salaried", 600));
+    }
+}

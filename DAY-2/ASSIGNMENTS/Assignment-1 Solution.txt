@@ -1,0 +1,43 @@
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class LoginValidatorTest {
+
+    @Test
+    public void testUsernameBoundaries() {
+        assertFalse(LoginValidator.isUsernameValid(""));       // 0 chars
+        assertFalse(LoginValidator.isUsernameValid("ab"));     // 2 chars
+        assertTrue(LoginValidator.isUsernameValid("abc"));     // 3 chars
+        assertTrue(LoginValidator.isUsernameValid("abcdefgh")); // mid value
+        assertTrue(LoginValidator.isUsernameValid("abcdefghijklmno")); // 15 chars
+        assertFalse(LoginValidator.isUsernameValid("abcdefghijklmnop")); // 16 chars
+    }
+
+    @Test
+    public void testPasswordBoundaries() {
+        assertFalse(LoginValidator.isPasswordValid("1234567"));     // 7 chars
+        assertTrue(LoginValidator.isPasswordValid("12345678"));     // 8 chars
+        assertTrue(LoginValidator.isPasswordValid("mypassword123")); // mid value
+        assertTrue(LoginValidator.isPasswordValid("12345678901234567890")); // 20 chars
+        assertFalse(LoginValidator.isPasswordValid("123456789012345678901")); // 21 chars
+    }
+
+    @Test
+    public void testLoginAttemptBoundaries() {
+        assertFalse(LoginValidator.isLoginAttemptValid(-1)); // invalid
+        assertTrue(LoginValidator.isLoginAttemptValid(0));   // lower bound
+        assertTrue(LoginValidator.isLoginAttemptValid(1));   // just above lower
+        assertTrue(LoginValidator.isLoginAttemptValid(4));   // just below upper
+        assertTrue(LoginValidator.isLoginAttemptValid(5));   // upper bound
+        assertFalse(LoginValidator.isLoginAttemptValid(6));  // just above upper
+    }
+
+    @Test
+    public void testCombinedLoginValidation() {
+        assertTrue(
+            LoginValidator.isUsernameValid("admin") &&
+            LoginValidator.isPasswordValid("secure1234") &&
+            LoginValidator.isLoginAttemptValid(2)
+        );
+    }
+}
